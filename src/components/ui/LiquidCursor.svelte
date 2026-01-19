@@ -3,8 +3,8 @@
 
   // Usamos spring para que el movimiento sea "líquido" y suave
   let coords = spring({ x: 0, y: 0 }, {
-    stiffness: 0.05,
-    damping: 0.15
+    stiffness: 0.15,
+    damping: 0.25
   });
 
   function handleMouseMove(event) {

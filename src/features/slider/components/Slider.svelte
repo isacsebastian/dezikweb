@@ -82,11 +82,11 @@
 
     .section-title {
         text-align: center;
+        color: #fff;
         font-size: var(--font-size-4xl);
         margin-bottom: var(--spacing-2xl);
-        background: linear-gradient(135deg, var(--primary) 0%, #ff6b75 100%);
         -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-text-fill-color: #fff;
         background-clip: text;
     }
 
@@ -119,8 +119,8 @@
     .card {
         width: 100%;
         height: 100%;
-        background: rgba(255, 255, 255, 0.9);
-        border: 2px solid #333;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 16px;
         padding: 16px;
         display: flex;
@@ -133,14 +133,15 @@
     .logo {
         width: 120px;
         height: 120px;
-        background: rgba(200, 200, 200, 0.5);
-        border: 2px solid #666;
+        background: transparent;
+        border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: bold;
         flex-shrink: 0;
+        color: #fff;
     }
 
     .content {
@@ -152,28 +153,30 @@
     }
 
     .etiqueta {
-        background: rgba(100, 100, 100, 0.2);
-        border: 1px solid #999;
+        background: transparent;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 8px;
         padding: 4px 12px;
         font-size: 12px;
         width: fit-content;
+        color: #fff;
     }
 
     .titulo {
         font-size: 18px;
         font-weight: bold;
-        color: #000;
+        color: #fff;
     }
 
     .descripcion {
         font-size: 14px;
-        color: #555;
+        color: rgba(255, 255, 255, 0.7);
     }
 
     .card:hover {
         transform: scale(1.02);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
     }
 
     @media (max-width: 768px) {
