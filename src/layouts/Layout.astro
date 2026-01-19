@@ -1,0 +1,36 @@
+---
+import LiquidCursor from '../components/ui/LiquidCursor.svelte';
+
+interface Props {
+    title?: string;
+    description?: string;
+}
+
+const { 
+    title = 'Dezik',
+    description = 'Arquitectura web super animada'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+    </head>
+    <body>
+        <LiquidCursor client:load />
+        <slot />
+    </body>
+</html>
+
+<style is:global>
+    @import '../styles/variables.css';
+    @import '../styles/global.css';
+    @import '../styles/utilities.css';
+    @import '../styles/animations.css';
+</style>

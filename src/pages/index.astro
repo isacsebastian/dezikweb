@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/layout/Header.svelte';
+import Footer from '../components/layout/Footer.astro';
+
+import { Hero } from '../features/hero';
+import { Info } from '../features/info';
+import { Slider } from '../features/slider';
+import { Services } from '../features/services';
+import { Contact } from '../features/contact';
+---
+
+<Layout title="Dezik - Experiencias Digitales Increíbles">
+    <Header client:load />
+    
+    <main>
+        <Hero client:load />
+        <Slider client:visible />
+        <Info client:visible />
+        <Services client:visible />
+        <Contact client:visible />
+    </main>
+
+    <Footer />
+</Layout>
