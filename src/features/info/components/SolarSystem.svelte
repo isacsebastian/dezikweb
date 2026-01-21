@@ -122,14 +122,16 @@
     .solar-system-wrapper {
         position: relative;
         width: 100%;
-        height: 100%;
-        min-height: 400px;
+        height: 55vh;
+        min-height: 55vh;
         display: flex;
         align-items: center;
         justify-content: center;
         background: radial-gradient(circle at center, rgba(25,25,25,0.5) 0%, rgba(13,13,13,1) 70%);
         border-radius: var(--border-radius);
         overflow: hidden;
+        transform: scale(0.85);
+        transform-origin: center center;
     }
 
     /* Core */

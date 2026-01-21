@@ -30,7 +30,7 @@
 <section class="info-section">
     <div class="info-container">
         <header class="info-header info-anim-item">
-            <h2 class="section-title">Meet Noon...</h2>
+            <h2 class="section-title">Dezik labs...</h2>
             <p class="section-subtitle">Your strategic partner in talent acquisition.</p>
         </header>
 
@@ -64,7 +64,7 @@
     .info-section {
         width: 100%;
         background-color: var(--bg-color); /* Dark background from variables */
-        padding: var(--spacing-3xl) 0;
+        padding: var(--spacing-xl) 0;
         color: var(--text-color);
         overflow: hidden;
     }
@@ -75,7 +75,7 @@
         margin: 0 auto;
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-2xl);
+        gap: var(--spacing-lg);
     }
 
     .info-header {
@@ -100,7 +100,7 @@
     .info-body {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-xl);
+        gap: var(--spacing-md);
     }
 
     /* Media Column */
@@ -110,7 +110,7 @@
 
     .image-wrapper {
         width: 100%;
-        min-height: 60vh;
+        min-height: 55vh;
         border-radius: var(--border-radius);
         overflow: hidden;
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -141,7 +141,7 @@
         margin: 0;
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-sm);
     }
 
     .feature-item {
