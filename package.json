@@ -14,6 +14,7 @@
     "astro": "^5.16.11",
     "gsap": "^3.14.2",
     "lucide-svelte": "^0.562.0",
+    "simplex-noise": "^4.0.3",
     "svelte": "^5.47.0",
     "three": "^0.182.0",
     "typescript": "^5.9.3",

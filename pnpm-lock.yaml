@@ -23,6 +23,9 @@ importers:
       lucide-svelte:
         specifier: ^0.562.0
         version: 0.562.0(svelte@5.47.0)
+      simplex-noise:
+        specifier: ^4.0.3
+        version: 4.0.3
       svelte:
         specifier: ^5.47.0
         version: 5.47.0
@@ -1324,6 +1327,9 @@ packages:
 
   shiki@3.21.0:
     resolution: {integrity: sha512-N65B/3bqL/TI2crrXr+4UivctrAGEjmsib5rPMMPpFp1xAx/w03v8WZ9RDDFYteXoEgY7qZ4HGgl5KBIu1153w==}
+
+  simplex-noise@4.0.3:
+    resolution: {integrity: sha512-qSE2I4AngLQG7BXqoZj51jokT4WUXe8mOBrvfOXpci8+6Yu44+/dD5zqDpOx3Ux792eamTd2lLcI8jqFntk/lg==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -3217,6 +3223,8 @@ snapshots:
       '@shikijs/types': 3.21.0
       '@shikijs/vscode-textmate': 10.0.2
       '@types/hast': 3.0.4
+
+  simplex-noise@4.0.3: {}
 
   sisteransi@1.0.5: {}
 
