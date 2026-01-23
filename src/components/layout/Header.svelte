@@ -18,10 +18,10 @@
     ];
 
     // Valores interpolados basados en scrollProgress (0 a 1)
-    let paddingHorizontal = $derived(32 + scrollProgress * 38); // 32px → 70px
-    let gap = $derived(32 - scrollProgress * 32); // 32px → 0px
+    let paddingHorizontal = $derived(24 + scrollProgress * 30); // 24px → 54px
+    let gap = $derived(24 - scrollProgress * 24); // 24px → 0px
     let navOpacity = $derived(1 - scrollProgress); // 1 → 0
-    let navMaxWidth = $derived(500 - scrollProgress * 500); // 500px → 0px
+    let navMaxWidth = $derived(400 - scrollProgress * 400); // 400px → 0px
 
     const toggleMenu = () => {
         isMenuOpen = !isMenuOpen;
@@ -110,7 +110,7 @@
         <!-- Desktop Navigation - Pill Style -->
         <div
             class="desktop-nav"
-            style="padding: 12px {paddingHorizontal}px; gap: {gap}px;"
+            style="padding: 8px {paddingHorizontal}px; gap: {gap}px;"
         >
             <span class="nav-border-beam"></span>
             <ul
@@ -131,7 +131,7 @@
             </ul>
 
             <a href="/" class="logo">
-                <img src="/src/assets/brand/logo.svg" alt="Dezik Wallet" />
+                <img src="/logodezik.svg" alt="Dezik Wallet" />
             </a>
 
             <ul
@@ -155,7 +155,7 @@
         <!-- Mobile Menu Toggle -->
         <div class="mobile-header">
             <a href="/" class="mobile-logo">
-                <img src="/src/assets/brand/logo.svg" alt="Dezik Wallet" />
+                <img src="/logodezik.svg" alt="Dezik Wallet" />
             </a>
 
             <div class="menu-toggle-wrapper">
@@ -263,61 +263,18 @@
         position: absolute;
         inset: 0;
         border-radius: 50px;
-        padding: 2px;
-        background: conic-gradient(
-            from var(--angle),
-            transparent 0%,
-            transparent 60%,
-            rgba(255, 255, 255, 0.1) 70%,
-            rgba(255, 255, 255, 0.4) 75%,
-            rgba(255, 255, 255, 0.9) 80%,
-            rgba(255, 255, 255, 1) 82.5%,
-            rgba(255, 255, 255, 0.9) 85%,
-            rgba(255, 255, 255, 0.4) 90%,
-            rgba(255, 255, 255, 0.1) 95%,
-            transparent 100%
-        );
-        -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        animation: border-beam-spin 3s linear infinite;
-        filter: blur(0.5px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         pointer-events: none;
     }
 
-    .nav-border-beam::after {
-        content: "";
-        position: absolute;
-        inset: -10px;
-        background: conic-gradient(
-            from var(--angle),
-            transparent 0%,
-            transparent 70%,
-            rgba(255, 255, 255, 0.05) 75%,
-            rgba(255, 255, 255, 0.2) 80%,
-            rgba(255, 255, 255, 0.3) 82.5%,
-            rgba(255, 255, 255, 0.2) 85%,
-            rgba(255, 255, 255, 0.05) 90%,
-            transparent 100%
-        );
-        filter: blur(15px);
-        opacity: 0.8;
-        z-index: -1;
-    }
-
     .desktop-nav:hover {
-        padding: 12px 32px !important;
-        gap: 32px !important;
+        padding: 8px 24px !important;
+        gap: 24px !important;
     }
 
     .desktop-nav:hover .nav-list {
         opacity: 1 !important;
-        max-width: 500px !important;
+        max-width: 400px !important;
     }
 
     .logo {
@@ -329,7 +286,7 @@
     }
 
     .logo img {
-        height: 40px;
+        height: 32px;
         width: auto;
     }
 
@@ -360,7 +317,7 @@
         align-items: center;
         justify-content: space-between;
         width: 100%;
-        padding: 12px 20px;
+        padding: 8px 16px;
         background: rgba(13, 13, 13, 0.8);
         backdrop-filter: blur(12px);
         border-radius: 50px;
@@ -375,14 +332,14 @@
     }
 
     .mobile-logo img {
-        height: 28px;
+        height: 24px;
         width: auto;
     }
 
     /* Hamburger menu wrapper with border-beam */
     .menu-toggle-wrapper {
         position: relative;
-        border-radius: 12px;
+        border-radius: 10px;
         overflow: hidden;
         isolation: isolate;
     }
@@ -390,7 +347,7 @@
     .menu-toggle-wrapper .border-beam {
         position: absolute;
         inset: 0;
-        border-radius: 12px;
+        border-radius: 10px;
         padding: 1.5px;
         background: conic-gradient(
             from var(--angle),
@@ -422,17 +379,17 @@
         display: flex;
         position: relative;
         flex-direction: column;
-        gap: 5px;
+        gap: 4px;
         background: rgba(13, 13, 13, 0.9);
         border: none;
         cursor: pointer;
-        padding: 12px;
-        border-radius: 12px;
+        padding: 10px;
+        border-radius: 10px;
         z-index: 1;
     }
 
     .menu-toggle span {
-        width: 25px;
+        width: 20px;
         height: 2px;
         background: var(--text-color);
         transition: all 0.3s ease;
@@ -440,7 +397,7 @@
 
     /* Hamburger animation to X */
     .menu-toggle span.open:nth-child(1) {
-        transform: rotate(45deg) translateY(7px);
+        transform: rotate(45deg) translateY(6px);
     }
 
     .menu-toggle span.open:nth-child(2) {
@@ -448,7 +405,7 @@
     }
 
     .menu-toggle span.open:nth-child(3) {
-        transform: rotate(-45deg) translateY(-7px);
+        transform: rotate(-45deg) translateY(-6px);
     }
 
     /* Mobile overlay */

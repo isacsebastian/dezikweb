@@ -13,6 +13,9 @@
     let container: HTMLElement;
     let tl: gsap.core.Timeline;
 
+    // Rotación continua base (sutil)
+    let rotationTweens: gsap.core.Tween[] = [];
+
     onMount(() => {
         tl = gsap.timeline({
             scrollTrigger: {
@@ -33,6 +36,10 @@
             duration: 2,
             stagger: 0.2,
             ease: "power3.out",
+            onComplete: () => {
+                // Iniciar rotación continua sutil después de la entrada
+                startContinuousRotation("slow");
+            },
         });
 
         // Float animation for stability after entrance
@@ -49,41 +56,65 @@
         });
     });
 
-    function handleMouseEnter() {
-        // "Opening the door" effect: Rotate rings differentially to the right
-        gsap.to(".ring-1", { rotation: 90, duration: 1.5, ease: "power2.out" });
-        gsap.to(".ring-2", { rotation: 60, duration: 1.5, ease: "power2.out" });
-        gsap.to(".ring-3", { rotation: 30, duration: 1.5, ease: "power2.out" });
+    function startContinuousRotation(speed: "slow" | "fast") {
+        // Matar tweens anteriores
+        rotationTweens.forEach((t) => t.kill());
+        rotationTweens = [];
 
-        // Optional: Scale up slightly for focus
+        // Velocidades: slow = sutil, fast = notable en hover
+        const durations = speed === "slow" ? [40, 50, 60] : [12, 15, 18];
+
+        // Ring 1 - rota en sentido horario
+        rotationTweens.push(
+            gsap.to(".ring-1", {
+                rotation: "+=360",
+                duration: durations[0],
+                repeat: -1,
+                ease: "none",
+            })
+        );
+
+        // Ring 2 - rota en sentido antihorario
+        rotationTweens.push(
+            gsap.to(".ring-2", {
+                rotation: "-=360",
+                duration: durations[1],
+                repeat: -1,
+                ease: "none",
+            })
+        );
+
+        // Ring 3 - rota en sentido horario
+        rotationTweens.push(
+            gsap.to(".ring-3", {
+                rotation: "+=360",
+                duration: durations[2],
+                repeat: -1,
+                ease: "none",
+            })
+        );
+    }
+
+    function handleMouseEnter() {
+        // Cambiar a rotación rápida
+        startContinuousRotation("fast");
+
+        // Escala más notable en hover
         gsap.to(".solar-system-wrapper", {
-            scale: 1.02,
-            duration: 0.5,
+            scale: 1.05,
+            duration: 0.6,
             ease: "power2.out",
         });
     }
 
     function handleMouseLeave() {
-        // Return to base state (0 degrees is the rested state after entrance)
-        gsap.to(".ring-1", {
-            rotation: 0,
-            duration: 1.2,
-            ease: "power2.inOut",
-        });
-        gsap.to(".ring-2", {
-            rotation: 0,
-            duration: 1.2,
-            ease: "power2.inOut",
-        });
-        gsap.to(".ring-3", {
-            rotation: 0,
-            duration: 1.2,
-            ease: "power2.inOut",
-        });
+        // Volver a rotación sutil
+        startContinuousRotation("slow");
 
+        // Volver a escala normal
         gsap.to(".solar-system-wrapper", {
             scale: 1,
-            duration: 0.5,
+            duration: 0.6,
             ease: "power2.inOut",
         });
     }
@@ -155,8 +186,8 @@
     .solar-system-wrapper {
         position: relative;
         width: 100%;
-        height: 40vh;
-        min-height: 40vh;
+        height: 50vh;
+        min-height: 50vh;
         display: flex;
         align-items: center;
         justify-content: center;

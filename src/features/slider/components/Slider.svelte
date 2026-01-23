@@ -38,7 +38,7 @@
 
     <div
         class="slider-container"
-        style="--width: 280px; --height: 160px; --gap: 32px;"
+        style="--width: 200px; --height: 120px; --gap: 32px;"
     >
         <div class="slider-viewport">
             <div
@@ -69,6 +69,7 @@
     }
 
     .slider-section {
+        margin-top: -22vh;
         padding: var(--spacing-3xl) 0;
         overflow: hidden;
         width: 100%;
@@ -79,6 +80,10 @@
         color: #fff;
         font-size: var(--font-size-4xl);
         margin-bottom: var(--spacing-2xl);
+        position: relative;
+        z-index: 10;
+        font-family: "Aeonik", sans-serif;
+        font-weight: 700;
     }
 
     .slider-container {

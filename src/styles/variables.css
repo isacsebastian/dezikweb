@@ -1,6 +1,14 @@
 @font-face {
     font-family: 'Aeonik';
-    src: url('/fonts/Aeonik-Regular.woff2') format('woff2');
+    src: url('/fonts/Aeonik/Aeonik_Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aeonik';
+    src: url('/fonts/Aeonik/Aeonik-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -8,14 +16,14 @@
 
 @font-face {
     font-family: 'Aeonik';
-    src: url('/fonts/Aeonik-Bold.woff2') format('woff2');
+    src: url('/fonts/Aeonik/Aeonik-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
 }
 
 :root {
-    --bg-color: #0D0D0D;      
+    --bg-color: #0D0D0D;
     --text-color: #ffffff;
     --primary: #F22C36;
     --gradient-hover: linear-gradient(90deg, #F22C36 0%, #ff5e66 100%);

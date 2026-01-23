@@ -1,15 +1,13 @@
 ---
-import LiquidCursor from '../components/ui/LiquidCursor.svelte';
+import LiquidCursor from "../components/ui/LiquidCursor.svelte";
 
 interface Props {
     title?: string;
     description?: string;
 }
 
-const { 
-    title = 'Dezik',
-    description = 'Arquitectura web super animada'
-} = Astro.props;
+const { title = "Dezik", description = "Arquitectura web super animada" } =
+    Astro.props;
 ---
 
 <!doctype html>
@@ -21,9 +19,36 @@ const {
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+
+        <!-- Preload Aeonik Fonts -->
+        <link
+            rel="preload"
+            href="/fonts/Aeonik/Aeonik-Regular.ttf"
+            as="font"
+            type="font/ttf"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/Aeonik/Aeonik-Bold.ttf"
+            as="font"
+            type="font/ttf"
+            crossorigin
+        />
+        <link
+            rel="preload"
+            href="/fonts/Aeonik/Aeonik_Light.ttf"
+            as="font"
+            type="font/ttf"
+            crossorigin
+        />
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Syne:wght@400..800&display=swap"
+            rel="stylesheet"
+        />
     </head>
     <body>
         <LiquidCursor client:load />
@@ -32,8 +57,8 @@ const {
 </html>
 
 <style is:global>
-    @import '../styles/variables.css';
-    @import '../styles/global.css';
-    @import '../styles/utilities.css';
-    @import '../styles/animations.css';
+    @import "../styles/variables.css";
+    @import "../styles/global.css";
+    @import "../styles/utilities.css";
+    @import "../styles/animations.css";
 </style>
