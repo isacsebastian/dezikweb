@@ -1,70 +1,220 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { gsap } from '../../lib/animations/gsap-config';
-    import BorderBeamButton from '../ui/BorderBeamButton.svelte';
+    import { onMount, onDestroy } from "svelte";
+    import { gsap } from "../../lib/animations/gsap-config";
+    import NavLink from "../ui/NavLink.svelte";
 
     let header: HTMLElement;
     let isMenuOpen = $state(false);
-    let isScrolled = $state(false);
+    let activeSection = $state("#hero");
+    let clickedMobileLink = $state("");
+    let scrollProgress = $state(0);
+    let observer: IntersectionObserver;
+
+    const navItems = [
+        { name: "Inicio", href: "#hero" },
+        { name: "Servicios", href: "#services" },
+        { name: "Nosotros", href: "#about" },
+        { name: "Contacto", href: "#contact" },
+    ];
+
+    // Valores interpolados basados en scrollProgress (0 a 1)
+    let paddingHorizontal = $derived(32 + scrollProgress * 38); // 32px → 70px
+    let gap = $derived(32 - scrollProgress * 32); // 32px → 0px
+    let navOpacity = $derived(1 - scrollProgress); // 1 → 0
+    let navMaxWidth = $derived(500 - scrollProgress * 500); // 500px → 0px
 
     const toggleMenu = () => {
         isMenuOpen = !isMenuOpen;
     };
 
+    const handleMobileClick = (href: string) => {
+        clickedMobileLink = href;
+        setTimeout(() => {
+            clickedMobileLink = "";
+            toggleMenu();
+        }, 800);
+    };
+
+    const scrollToSection = (event: MouseEvent, href: string) => {
+        event.preventDefault();
+        const element = document.querySelector(href);
+        if (element) {
+            const headerOffset = 100;
+            const elementPosition = element.getBoundingClientRect().top;
+            const offsetPosition =
+                elementPosition + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: "smooth",
+            });
+        }
+    };
+
     onMount(() => {
         const handleScroll = () => {
-            isScrolled = window.scrollY > 50;
+            const scrollY = window.scrollY;
+            const maxScroll = 100;
+            scrollProgress = Math.min(scrollY / maxScroll, 1);
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
+
+        // Intersection Observer para tracking de sección activa
+        observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        const id = `#${entry.target.id}`;
+                        const matchedItem = navItems.find(
+                            (item) => item.href === id,
+                        );
+                        if (matchedItem) {
+                            activeSection = matchedItem.href;
+                        }
+                    }
+                });
+            },
+            { threshold: 0.2 },
+        );
+
+        // Observar todas las secciones
+        navItems.forEach((item) => {
+            const element = document.querySelector(item.href);
+            if (element) {
+                observer.observe(element);
+            }
+        });
 
         gsap.from(header, {
             y: -100,
             opacity: 0,
             duration: 0.8,
-            ease: 'power3.out',
+            ease: "power3.out",
         });
 
         return () => {
-            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener("scroll", handleScroll);
         };
+    });
+
+    onDestroy(() => {
+        if (observer) {
+            observer.disconnect();
+        }
     });
 </script>
 
-<header bind:this={header} class="header" class:scrolled={isScrolled}>
-    <div class="container header-content">
-        <div class="logo">
-            <a href="/">
+<header bind:this={header} class="header">
+    <div class="header-wrapper">
+        <!-- Desktop Navigation - Pill Style -->
+        <div
+            class="desktop-nav"
+            style="padding: 12px {paddingHorizontal}px; gap: {gap}px;"
+        >
+            <span class="nav-border-beam"></span>
+            <ul
+                class="nav-list nav-list-left"
+                style="opacity: {navOpacity}; max-width: {navMaxWidth}px;"
+            >
+                {#each navItems.slice(0, 2) as item}
+                    <li>
+                        <NavLink
+                            href={item.href}
+                            active={activeSection === item.href}
+                            onclick={(e) => scrollToSection(e, item.href)}
+                        >
+                            {item.name}
+                        </NavLink>
+                    </li>
+                {/each}
+            </ul>
+
+            <a href="/" class="logo">
                 <img src="/src/assets/brand/logo.svg" alt="Dezik Wallet" />
             </a>
+
+            <ul
+                class="nav-list nav-list-right"
+                style="opacity: {navOpacity}; max-width: {navMaxWidth}px;"
+            >
+                {#each navItems.slice(2) as item}
+                    <li>
+                        <NavLink
+                            href={item.href}
+                            active={activeSection === item.href}
+                            onclick={(e) => scrollToSection(e, item.href)}
+                        >
+                            {item.name}
+                        </NavLink>
+                    </li>
+                {/each}
+            </ul>
         </div>
 
-        <nav class="desktop-nav">
-            <a href="#hero">Inicio</a>
-            <a href="#services">Servicios</a>
-            <a href="#about">Nosotros</a>
-            <a href="#contact">Contacto</a>
-        </nav>
+        <!-- Mobile Menu Toggle -->
+        <div class="mobile-header">
+            <a href="/" class="mobile-logo">
+                <img src="/src/assets/brand/logo.svg" alt="Dezik Wallet" />
+            </a>
 
-        <div class="header-actions">
-            <BorderBeamButton>Free Trial</BorderBeamButton>
-            <BorderBeamButton>Log In</BorderBeamButton>
+            <div class="menu-toggle-wrapper">
+                <span class="border-beam"></span>
+                <button
+                    class="menu-toggle"
+                    onclick={toggleMenu}
+                    aria-label="Toggle menu"
+                >
+                    <span class:open={isMenuOpen}></span>
+                    <span class:open={isMenuOpen}></span>
+                    <span class:open={isMenuOpen}></span>
+                </button>
+            </div>
         </div>
-
-        <button class="menu-toggle" onclick={toggleMenu} aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </div>
 
     {#if isMenuOpen}
-        <div class="mobile-menu">
-            <nav>
-                <a href="#hero" onclick={toggleMenu}>Inicio</a>
-                <a href="#services" onclick={toggleMenu}>Servicios</a>
-                <a href="#about" onclick={toggleMenu}>Nosotros</a>
-                <a href="#contact" onclick={toggleMenu}>Contacto</a>
+        <!-- Overlay -->
+        <div
+            class="mobile-overlay"
+            role="button"
+            tabindex="0"
+            onclick={toggleMenu}
+            onkeydown={(e) => e.key === "Enter" && toggleMenu()}
+        ></div>
+
+        <!-- Sheet -->
+        <div class="mobile-sheet">
+            <div class="sheet-header">
+                <button
+                    class="close-btn"
+                    onclick={toggleMenu}
+                    aria-label="Cerrar menú"
+                >
+                    <svg
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <nav class="mobile-nav">
+                {#each navItems as item}
+                    <NavLink
+                        href={item.href}
+                        active={clickedMobileLink === item.href}
+                        onclick={() => handleMobileClick(item.href)}
+                        class="mobile-link"
+                    >
+                        {item.name}
+                    </NavLink>
+                {/each}
             </nav>
         </div>
     {/if}
@@ -73,136 +223,348 @@
 <style>
     .header {
         position: fixed;
-        top: 0;
+        top: 16px;
         left: 0;
-        width: 100%;
-        z-index: var(--z-index-sticky);
-        padding: var(--spacing-md) 0;
-        transition: all var(--transition-base);
-        background: rgba(13, 13, 13, 0.95);
-        backdrop-filter: blur(10px);
-    }
-
-    .header.scrolled {
-        background: rgba(13, 13, 13, 0.98);
-        backdrop-filter: blur(10px);
-        box-shadow: var(--shadow-md);
-        padding: var(--spacing-sm) 0;
-    }
-
-    .header-content {
+        right: 0;
+        z-index: 99;
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        padding: 0 16px;
+        pointer-events: none;
+    }
+
+    .header-wrapper {
+        width: auto;
+        max-width: 1280px;
+        display: flex;
+        justify-content: center;
+        pointer-events: auto;
+    }
+
+    /* Desktop Navigation - Pill Style */
+    .desktop-nav {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
         align-items: center;
-        gap: var(--spacing-lg);
+        background: #000000;
+        backdrop-filter: blur(12px);
+        border-radius: 50px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        transition:
+            padding 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+            gap 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+        overflow: hidden;
+        isolation: isolate;
     }
 
-    .logo a {
-        display: block;
-        transition: opacity var(--transition-fast);
+    .nav-border-beam {
+        position: absolute;
+        inset: 0;
+        border-radius: 50px;
+        padding: 2px;
+        background: conic-gradient(
+            from var(--angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.1) 70%,
+            rgba(255, 255, 255, 0.4) 75%,
+            rgba(255, 255, 255, 0.9) 80%,
+            rgba(255, 255, 255, 1) 82.5%,
+            rgba(255, 255, 255, 0.9) 85%,
+            rgba(255, 255, 255, 0.4) 90%,
+            rgba(255, 255, 255, 0.1) 95%,
+            transparent 100%
+        );
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        animation: border-beam-spin 3s linear infinite;
+        filter: blur(0.5px);
+        pointer-events: none;
     }
 
-    .logo a:hover {
+    .nav-border-beam::after {
+        content: "";
+        position: absolute;
+        inset: -10px;
+        background: conic-gradient(
+            from var(--angle),
+            transparent 0%,
+            transparent 70%,
+            rgba(255, 255, 255, 0.05) 75%,
+            rgba(255, 255, 255, 0.2) 80%,
+            rgba(255, 255, 255, 0.3) 82.5%,
+            rgba(255, 255, 255, 0.2) 85%,
+            rgba(255, 255, 255, 0.05) 90%,
+            transparent 100%
+        );
+        filter: blur(15px);
         opacity: 0.8;
+        z-index: -1;
+    }
+
+    .desktop-nav:hover {
+        padding: 12px 32px !important;
+        gap: 32px !important;
+    }
+
+    .desktop-nav:hover .nav-list {
+        opacity: 1 !important;
+        max-width: 500px !important;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        grid-column: 2;
     }
 
     .logo img {
-        width: 70%;
-        height: auto;
-        max-height: 45px;
-        display: block;
+        height: 40px;
+        width: auto;
     }
 
-    .desktop-nav {
+    .nav-list {
         display: flex;
-        gap: var(--spacing-lg);
-        flex: 1;
-        justify-content: center;
-    }
-
-    .desktop-nav a {
-        font-weight: 500;
-        position: relative;
-        transition: color var(--transition-fast);
-    }
-
-    .desktop-nav a::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: var(--primary);
-        transition: width var(--transition-base);
-    }
-
-    .desktop-nav a:hover {
-        color: var(--primary);
-    }
-
-    .desktop-nav a:hover::after {
-        width: 100%;
-    }
-
-    .header-actions {
-        display: flex;
-        gap: var(--spacing-md);
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
         align-items: center;
+        overflow: hidden;
+        transition:
+            opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+            max-width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-list-left {
+        justify-content: flex-end;
+    }
+
+    .nav-list-right {
+        justify-content: flex-start;
+    }
+
+    /* Mobile header */
+    .mobile-header {
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        padding: 12px 20px;
+        background: rgba(13, 13, 13, 0.8);
+        backdrop-filter: blur(12px);
+        border-radius: 50px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .mobile-logo {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    .mobile-logo img {
+        height: 28px;
+        width: auto;
+    }
+
+    /* Hamburger menu wrapper with border-beam */
+    .menu-toggle-wrapper {
+        position: relative;
+        border-radius: 12px;
+        overflow: hidden;
+        isolation: isolate;
+    }
+
+    .menu-toggle-wrapper .border-beam {
+        position: absolute;
+        inset: 0;
+        border-radius: 12px;
+        padding: 1.5px;
+        background: conic-gradient(
+            from var(--angle),
+            transparent 0%,
+            transparent 60%,
+            rgba(255, 255, 255, 0.1) 70%,
+            rgba(255, 255, 255, 0.4) 75%,
+            rgba(255, 255, 255, 0.9) 80%,
+            rgba(255, 255, 255, 1) 82.5%,
+            rgba(255, 255, 255, 0.9) 85%,
+            rgba(255, 255, 255, 0.4) 90%,
+            rgba(255, 255, 255, 0.1) 95%,
+            transparent 100%
+        );
+        -webkit-mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        -webkit-mask-composite: xor;
+        mask:
+            linear-gradient(#fff 0 0) content-box,
+            linear-gradient(#fff 0 0);
+        mask-composite: exclude;
+        animation: border-beam-spin 3s linear infinite;
+        filter: blur(0.3px);
+        pointer-events: none;
     }
 
     .menu-toggle {
-        display: none;
+        display: flex;
+        position: relative;
         flex-direction: column;
         gap: 5px;
-        background: none;
+        background: rgba(13, 13, 13, 0.9);
         border: none;
         cursor: pointer;
-        padding: 8px;
+        padding: 12px;
+        border-radius: 12px;
+        z-index: 1;
     }
 
     .menu-toggle span {
         width: 25px;
         height: 2px;
         background: var(--text-color);
-        transition: all var(--transition-base);
+        transition: all 0.3s ease;
     }
 
-    .mobile-menu {
+    /* Hamburger animation to X */
+    .menu-toggle span.open:nth-child(1) {
+        transform: rotate(45deg) translateY(7px);
+    }
+
+    .menu-toggle span.open:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-toggle span.open:nth-child(3) {
+        transform: rotate(-45deg) translateY(-7px);
+    }
+
+    /* Mobile overlay */
+    .mobile-overlay {
         position: fixed;
-        top: 80px;
-        left: 0;
-        width: 100%;
-        background: rgba(13, 13, 13, 0.98);
-        backdrop-filter: blur(10px);
-        padding: var(--spacing-xl) 0;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        z-index: 999;
+        animation: fade-in 0.3s ease;
     }
 
-    .mobile-menu nav {
+    /* Mobile Sheet (slides from right) */
+    .mobile-sheet {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 320px;
+        max-width: 85vw;
+        background: rgba(13, 13, 13, 0.98);
+        backdrop-filter: blur(20px);
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
+        animation: slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sheet-header {
+        display: flex;
+        justify-content: flex-end;
         align-items: center;
+        padding: var(--spacing-xl) var(--spacing-lg);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    .mobile-menu a {
-        font-size: var(--font-size-lg);
-        font-weight: 500;
+    .close-btn {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    @media (max-width: 768px) {
-        .desktop-nav,
-        .header-actions {
+    .close-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        transform: rotate(90deg);
+    }
+
+    .mobile-nav {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-lg);
+        flex: 1;
+    }
+
+    .mobile-nav :global(.mobile-link) {
+        width: 100%;
+        text-align: center;
+        padding: 14px 20px;
+        font-size: 1.1rem;
+    }
+
+    @keyframes border-beam-spin {
+        0% {
+            --angle: 0deg;
+        }
+        100% {
+            --angle: 360deg;
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slide-in {
+        from {
+            transform: translateX(100%);
+        }
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @property --angle {
+        syntax: "<angle>";
+        initial-value: 0deg;
+        inherits: false;
+    }
+
+    @media (max-width: 1023px) {
+        .header-wrapper {
+            width: 100%;
+        }
+
+        .desktop-nav {
             display: none;
         }
 
-        .menu-toggle {
+        .mobile-header {
             display: flex;
-        }
-
-        .logo img {
-            width: 60%;
-            max-height: 35px;
         }
     }
 </style>

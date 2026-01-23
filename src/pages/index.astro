@@ -1,20 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/layout/Header.svelte';
-import Footer from '../components/layout/Footer.astro';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/layout/Header.svelte";
+import Footer from "../components/layout/Footer.astro";
 
-import { Hero } from '../features/hero';
-import { Info } from '../features/info';
-import { Slider } from '../features/slider';
-import { Services } from '../features/services';
-import { Contact } from '../features/contact';
-import { Recruiters } from '../features/recruiters';
-import { Manifesto } from '../features/manifesto';
+import { Hero } from "../features/hero";
+import { Info } from "../features/info";
+import { Slider } from "../features/slider";
+import { Services } from "../features/services";
+import { Contact } from "../features/contact";
+import { Recruiters } from "../features/recruiters";
+import { Manifesto } from "../features/manifesto";
 ---
 
 <Layout title="Dezik - Experiencias Digitales Increíbles">
     <Header client:load />
-    
+
     <main>
         <Hero client:load />
         <Manifesto client:visible />
@@ -25,5 +25,5 @@ import { Manifesto } from '../features/manifesto';
         <Contact client:visible />
     </main>
 
-    <Footer />
+    <!-- <Footer /> -->
 </Layout>

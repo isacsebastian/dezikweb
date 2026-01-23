@@ -1,31 +1,28 @@
 <script lang="ts">
-    import { onMount, onDestroy } from 'svelte';
+    import { onMount, onDestroy } from "svelte";
 
-    // Array de items para el slider (tarjetas)
-    const sliderItems = [
-        { id: 1, etiqueta: 'Web Development', titulo: 'Proyecto Alpha', descripcion: 'Desarrollo de aplicación web' },
-        { id: 2, etiqueta: 'Mobile App', titulo: 'Proyecto Beta', descripcion: 'App móvil multiplataforma' },
-        { id: 3, etiqueta: 'E-commerce', titulo: 'Proyecto Gamma', descripcion: 'Tienda online avanzada' },
-        { id: 4, etiqueta: 'Design System', titulo: 'Proyecto Delta', descripcion: 'Sistema de diseño completo' },
-        { id: 5, etiqueta: 'Backend API', titulo: 'Proyecto Epsilon', descripcion: 'API REST escalable' },
-        { id: 6, etiqueta: 'Cloud Services', titulo: 'Proyecto Zeta', descripcion: 'Infraestructura cloud' },
-        { id: 7, etiqueta: 'Database', titulo: 'Proyecto Eta', descripcion: 'Gestión de datos' },
-        { id: 8, etiqueta: 'DevOps', titulo: 'Proyecto Theta', descripcion: 'CI/CD automatizado' },
-        { id: 9, etiqueta: 'Security', titulo: 'Proyecto Iota', descripcion: 'Auditoría de seguridad' },
-        { id: 10, etiqueta: 'Analytics', titulo: 'Proyecto Kappa', descripcion: 'Dashboard de métricas' },
+    // Client logos from public/clients
+    const clients = [
+        "/clients/La-Barbiere.svg",
+        "/clients/Solare.svg",
+        "/clients/logodezik.svg",
+        "/clients/pura-vida.svg",
     ];
+
+    // Duplicate items to ensure smooth infinite scrolling
+    // We need enough items to fill the viewport + buffer
+    const sliderItems = [...clients, ...clients, ...clients, ...clients];
 
     let currentOffset = $state(0);
     let interval: number;
 
-    const cardsToShow = 4; // Mostrar 4 tarjetas a la vez
-    const cardsToMove = 2; // Mover 2 tarjetas cada vez
-    const autoMoveDelay = 3000; // 3 segundos
+    const cardsToShow = 4;
+    const cardsToMove = 1;
+    const autoMoveDelay = 3000;
 
-    const maxOffset = Math.max(0, sliderItems.length - cardsToShow);
+    const maxOffset = sliderItems.length - cardsToShow;
 
     onMount(() => {
-        // Auto-avanzar cada 3 segundos
         interval = setInterval(() => {
             currentOffset = (currentOffset + cardsToMove) % (maxOffset + 1);
         }, autoMoveDelay);
@@ -36,30 +33,26 @@
     });
 </script>
 
-
-
 <section class="slider-section">
-    <h2 class="section-title">Tecnologías que dominamos</h2>
-    
-    <!-- Slider: Auto move 2 cards every 3 seconds -->
-    <div 
+    <h2 class="section-title">Confían en nosotros</h2>
+
+    <div
         class="slider-container"
-        style="--width: 400px; --height: 180px; --gap: 24px;"
+        style="--width: 280px; --height: 160px; --gap: 32px;"
     >
         <div class="slider-viewport">
-            <div 
+            <div
                 class="slider-track"
                 style="transform: translateX(calc(-1 * {currentOffset} * (var(--width) + var(--gap))))"
             >
-                {#each sliderItems as item}
+                {#each sliderItems as client, i}
                     <div class="item">
                         <div class="card">
-                            <div class="logo">LOGO</div>
-                            <div class="content">
-                                <div class="etiqueta">{item.etiqueta}</div>
-                                <div class="titulo">{item.titulo}</div>
-                                <div class="descripcion">{item.descripcion}</div>
-                            </div>
+                            <img
+                                src={client}
+                                alt="Client Logo {i}"
+                                class="client-logo"
+                            />
                         </div>
                     </div>
                 {/each}
@@ -78,6 +71,7 @@
     .slider-section {
         padding: var(--spacing-3xl) 0;
         overflow: hidden;
+        width: 100%;
     }
 
     .section-title {
@@ -85,9 +79,6 @@
         color: #fff;
         font-size: var(--font-size-4xl);
         margin-bottom: var(--spacing-2xl);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: #fff;
-        background-clip: text;
     }
 
     .slider-container {
@@ -98,95 +89,92 @@
     }
 
     .slider-viewport {
-        width: 85%;
-        max-width: calc(4 * (var(--width) + var(--gap)) - var(--gap));
+        width: 100%;
+        max-width: 1400px;
         overflow: hidden;
         position: relative;
+        mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent
+        );
+        -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent
+        );
     }
 
     .slider-track {
         display: flex;
         gap: var(--gap);
         transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        padding: 0 var(--gap);
     }
 
     .item {
         width: var(--width);
         height: var(--height);
         flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .card {
         width: 100%;
         height: 100%;
-        background: transparent;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        /* Glassmorphism style */
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 16px;
-        padding: 16px;
+        padding: 24px;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 16px;
         transition: all 0.3s ease;
     }
 
-    .logo {
-        width: 120px;
-        height: 120px;
-        background: transparent;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        flex-shrink: 0;
-        color: #fff;
-    }
-
-    .content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .etiqueta {
-        background: transparent;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        border-radius: 8px;
-        padding: 4px 12px;
-        font-size: 12px;
-        width: fit-content;
-        color: #fff;
-    }
-
-    .titulo {
-        font-size: 18px;
-        font-weight: bold;
-        color: #fff;
-    }
-
-    .descripcion {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.7);
+    .client-logo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: grayscale(1) brightness(1.2);
+        transition: all 0.3s ease;
+        opacity: 0.7;
     }
 
     .card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card:hover .client-logo {
+        filter: grayscale(0) brightness(1);
+        opacity: 1;
+        transform: scale(1.05);
     }
 
     @media (max-width: 768px) {
-        .slider {
-            --width: 100px !important;
-            --height: 35px !important;
+        .slider-section {
+            padding: var(--spacing-xl) 0;
+        }
+
+        .slider-container {
+            --width: 160px !important;
+            --height: 100px !important;
+            --gap: 16px !important;
         }
 
         .section-title {
             font-size: var(--font-size-2xl);
+            margin-bottom: var(--spacing-xl);
         }
     }
 </style>
