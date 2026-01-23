@@ -1,28 +1,40 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-    import { gsap } from '../../../lib/animations/gsap-config';
-    import { CheckCircle } from 'lucide-svelte';
-    import SolarSystemVisual from './SolarSystem.svelte';
+    import { onMount } from "svelte";
+    import { gsap } from "../../../lib/animations/gsap-config";
+    import { CheckCircle } from "lucide-svelte";
+    import SolarSystemVisual from "./SolarSystem.svelte";
 
     // Placeholder data
     const features = [
-        { title: "Understanding", description: "Deep comprehension of your needs and goals." },
-        { title: "Sourcing", description: "Finding the best talent efficiently." },
-        { title: "Vetting", description: "Rigorous screening for quality assurance." },
-        { title: "Onboarding", description: "Seamless integration into your team." }
+        {
+            title: "Understanding",
+            description: "Deep comprehension of your needs and goals.",
+        },
+        {
+            title: "Sourcing",
+            description: "Finding the best talent efficiently.",
+        },
+        {
+            title: "Vetting",
+            description: "Rigorous screening for quality assurance.",
+        },
+        {
+            title: "Onboarding",
+            description: "Seamless integration into your team.",
+        },
     ];
 
     onMount(() => {
         // Simple entry animation
-        gsap.from('.info-anim-item', {
+        gsap.from(".info-anim-item", {
             opacity: 0,
             y: 30,
             duration: 0.8,
             stagger: 0.2,
             scrollTrigger: {
-                trigger: '.info-section',
-                start: 'top 80%'
-            }
+                trigger: ".info-section",
+                start: "top 80%",
+            },
         });
     });
 </script>
@@ -31,7 +43,9 @@
     <div class="info-container">
         <header class="info-header info-anim-item">
             <h2 class="section-title">Dezik labs...</h2>
-            <p class="section-subtitle">Your strategic partner in talent acquisition.</p>
+            <p class="section-subtitle">
+                Your strategic partner in talent acquisition.
+            </p>
         </header>
 
         <div class="info-body">
@@ -50,7 +64,9 @@
                             </div>
                             <div class="feature-content">
                                 <h3 class="feature-title">{feature.title}</h3>
-                                <p class="feature-desc">{feature.description}</p>
+                                <p class="feature-desc">
+                                    {feature.description}
+                                </p>
                             </div>
                         </li>
                     {/each}
@@ -63,7 +79,7 @@
 <style>
     .info-section {
         width: 100%;
-        background-color: var(--bg-color); /* Dark background from variables */
+        /*background-color: var(--bg-color); */
         padding: var(--spacing-xl) 0;
         color: var(--text-color);
         overflow: hidden;
@@ -85,7 +101,7 @@
     }
 
     .section-title {
-        font-family: 'Aeonik', sans-serif;
+        font-family: "Aeonik", sans-serif;
         font-size: var(--font-size-4xl);
         font-weight: 700;
         margin-bottom: var(--spacing-sm);
@@ -100,7 +116,7 @@
     .info-body {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
+        gap: var(--spacing-sm);
     }
 
     /* Media Column */
@@ -110,13 +126,13 @@
 
     .image-wrapper {
         width: 100%;
-        min-height: 55vh;
+        min-height: 45vh;
         border-radius: var(--border-radius);
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: transparent;
     }
 
     .placeholder-image {
@@ -146,9 +162,9 @@
 
     .feature-item {
         display: flex;
-        gap: var(--spacing-md);
+        gap: var(--spacing-xs);
         align-items: flex-start;
-        padding: var(--spacing-md);
+        padding: var(--spacing-xs);
         border-radius: var(--border-radius-sm);
         transition: var(--transition-base);
     }
@@ -188,7 +204,8 @@
             align-items: center;
         }
 
-        .info-media, .info-features {
+        .info-media,
+        .info-features {
             width: 50%;
         }
 

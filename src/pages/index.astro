@@ -9,6 +9,7 @@ import { Slider } from '../features/slider';
 import { Services } from '../features/services';
 import { Contact } from '../features/contact';
 import { Recruiters } from '../features/recruiters';
+import { Manifesto } from '../features/manifesto';
 ---
 
 <Layout title="Dezik - Experiencias Digitales Increíbles">
@@ -16,6 +17,7 @@ import { Recruiters } from '../features/recruiters';
     
     <main>
         <Hero client:load />
+        <Manifesto client:visible />
         <Slider client:visible />
         <Info client:visible />
         <Recruiters client:visible />
